@@ -52,6 +52,8 @@ pub enum DisplayHint {
     // Should we allow additional params that give a CDDL that further guides processing (like,
     // when data is not tagged but the shape is known for processing anyway)?
     Cbor,
+    /// `:braille`, formats bytes as unicode braille characters
+    Braille,
     /// Display hints currently not supported / understood
     Unknown(String),
 }
@@ -121,6 +123,7 @@ impl DisplayHint {
             "iso8601ms" => DisplayHint::ISO8601(TimePrecision::Millis),
             "iso8601s" => DisplayHint::ISO8601(TimePrecision::Seconds),
             "cbor" => DisplayHint::Cbor,
+            "braille" => DisplayHint::Braille,
             "?" => DisplayHint::Debug,
             _ => return None,
         })
