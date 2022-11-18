@@ -35,6 +35,8 @@ pub enum DisplayHint {
         disambiguator: String,
         crate_name: Option<String>,
     },
+    /// `:braille`, formats bytes as unicode braille characters
+    Braille,
     /// Display hints currently not supported / understood
     Unknown(String),
 }
@@ -99,6 +101,7 @@ impl DisplayHint {
             },
             "iso8601ms" => DisplayHint::ISO8601(TimePrecision::Millis),
             "iso8601s" => DisplayHint::ISO8601(TimePrecision::Seconds),
+            "braille" => DisplayHint::Braille,
             "?" => DisplayHint::Debug,
             _ => return None,
         })

@@ -132,7 +132,9 @@ impl<'t> Frame<'t> {
                                     // isolate the desired bitfields
                                     let bitfields = (*x << left_zeroes) >> right_zeroes;
 
-                                    if let Some(DisplayHint::Ascii) = hint {
+                                    if let Some(DisplayHint::Ascii) | Some(DisplayHint::Braille) =
+                                        hint
+                                    {
                                         let bstr = bitfields
                                             .to_be_bytes()
                                             .iter()
@@ -172,7 +174,7 @@ impl<'t> Frame<'t> {
                         Arg::FormatSlice { elements } => {
                             match hint {
                                 // Filter Ascii Hints, which contains u8 byte slices
-                                Some(DisplayHint::Ascii)
+                                Some(DisplayHint::Ascii) | Some(DisplayHint::Braille)
                                     if elements.iter().filter(|e| e.format == "{=u8}").count()
                                         != 0 =>
                                 {
@@ -365,6 +367,14 @@ impl<'t> Frame<'t> {
                             }
                         }
                     }
+                }
+                buf.push('\"');
+            }
+            Some(DisplayHint::Braille) => {
+                buf.push('\"');
+                for byte in bytes {
+                    let c = char::from_u32(0x2800 + u32::from(*byte)).unwrap();
+                    buf.push(c);
                 }
                 buf.push('\"');
             }
